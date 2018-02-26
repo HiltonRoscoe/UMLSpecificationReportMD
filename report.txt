@@ -1,0 +1,53 @@
+#set($packages = $array.createArray())
+#set($void = $array.addCollection($packages, $Package))
+#set($void = $array.addCollection($packages, $SmartPackage))
+#foreach ($package in $sorter.sort($packages, "qualifiedName"))
+#set($qualifiedName = $package.qualifiedName)
+#set ($classList = $array.createArray())
+#set ($interfaceList = $array.createArray())
+#set ($enumerationList = $array.createArray())
+#foreach ($element in $report.getOwnedElementsIncludingAdditional($package, true))
+#if ($element.elementType == "class")
+#set ($void = $classList.add($element))
+#elseif ($element.elementType == "interface")
+#set ($void = $interfaceList.add($element))
+#elseif ($element.elementType == "enumeration")
+#set ($void = $enumerationList.add($element))
+#end
+#end
+# Table of Contents
+- Table of Contents
+  - Enumerations
+#foreach ($enum in $sorter.sort($enumerationList))
+    - *The **[$enum.name](#$enum.elementID)** Enumeration*
+#end
+  - Classes
+#foreach ($class in $sorter.sort($classList))
+    - *The **[$class.name](#$class.elementID)** Class*
+#end
+# Enumerations
+#foreach ($enum in $sorter.sort($enumerationList))
+![alt text]($cImage.createImageWithRelativePath($enum.image))
+
+
+ENDIMG
+# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
+    
+Name | Value
+---- | -----
+#foreach ($enl in $enum.OwnedLiteral)`$enl.name`|$enl.documentation
+#end
+  #end
+# Classes
+#foreach ($class in $sorter.sort($classList))
+# <a name="$class.elementID"></a>*The **$class.name** Class*
+##END TOC SECTION
+$class.documentation.replaceAll("mdel://","#")
+
+Attribute | Multiplicity | Type | Attribute Description
+--------- | ------------ | ---- | ---------------------
+#foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$attr.documentation
+#end
+#end
+
+#end
