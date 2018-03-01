@@ -1,3 +1,4 @@
+#import('text', 'com.nomagic.reportwizard.tools.TextTool')
 #set($packages = $array.createArray())
 #set($void = $array.addCollection($packages, $Package))
 #set($void = $array.addCollection($packages, $SmartPackage))
@@ -35,18 +36,27 @@ ENDIMG
     
 Name | Value
 ---- | -----
-#foreach ($enl in $enum.OwnedLiteral)`$enl.name`|$enl.documentation
+#foreach ($enl in $enum.OwnedLiteral)`$enl.name`|$text.getPureText($enl.documentation)
 #end
   #end
 # Classes
 #foreach ($class in $sorter.sort($classList))
 # <a name="$class.elementID"></a>*The **$class.name** Class*
 ##END TOC SECTION
-$class.documentation.replaceAll("mdel://","#")
+
+$text.getPureText($class.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
+#foreach($el in $class.ownedElement)
+#if ($report.hasStereotype($el))
+
+```
+$el.documentation
+```
+#end
+#end
 
 Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
-#foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$attr.documentation
+#foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$text.getPureText($attr.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
 #end
 #end
 
