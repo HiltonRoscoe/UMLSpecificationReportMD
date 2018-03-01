@@ -29,10 +29,7 @@
 # Enumerations
 #foreach ($enum in $sorter.sort($enumerationList))
 ![alt text]($cImage.createImageWithRelativePath($enum.image))
-
-
-ENDIMG
-# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
+#[[###]]# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
     
 Name | Value
 ---- | -----
@@ -41,23 +38,22 @@ Name | Value
   #end
 # Classes
 #foreach ($class in $sorter.sort($classList))
-# <a name="$class.elementID"></a>*The **$class.name** Class*
+#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
 ##END TOC SECTION
 
 $text.getPureText($class.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
-#foreach($el in $class.ownedElement)
-#if ($report.hasStereotype($el))
-
-```
-$el.documentation
-```
-#end
-#end
 
 Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
 #foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$text.getPureText($attr.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
 #end
-#end
+#foreach($el in $class.ownedElement)
+#if ($report.hasStereotype($el))
 
+```$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_type")
+$el.documentation
+```
+#end
+#end
+#end
 #end
