@@ -28,7 +28,6 @@
 #end
 # Enumerations
 #foreach ($enum in $sorter.sort($enumerationList))
-![alt text]($cImage.createImageWithRelativePath($enum.image))
 #[[###]]# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
     
 Name | Value
