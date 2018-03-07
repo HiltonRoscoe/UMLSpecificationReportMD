@@ -29,6 +29,7 @@
 # Enumerations
 #foreach ($enum in $sorter.sort($enumerationList))
 #[[###]]# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
+![Image of $enum.name]($image.createImageWithRelativePath($enum.image))
     
 Name | Value
 ---- | -----
@@ -38,6 +39,7 @@ Name | Value
 # Classes
 #foreach ($class in $sorter.sort($classList))
 #[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
+![Image of $class.name]($image.createImageWithRelativePath($class.image))
 ##END TOC SECTION
 
 $text.getPureText($class.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
