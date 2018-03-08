@@ -49,10 +49,12 @@ Attribute | Multiplicity | Type | Attribute Description
 #foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$text.getPureText($attr.documentation.replaceAll("(?i)<a href=""mdel:\/\/([^>]+)"">(.+?)</a>","[$2](#$1)"))
 #end
 #foreach($el in $class.ownedElement)
-#if ($report.hasStereotype($el))
+#if ($report.containsStereotype($el,"psmDocumentation"))
+
+$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose"):
 
 ```$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_type")
-$el.documentation
+$el.documentation$el.body
 ```
 #end
 #end
