@@ -51,7 +51,9 @@ Attribute | Multiplicity | Type | Attribute Description
 #foreach($el in $class.ownedElement)
 #if ($report.containsStereotype($el,"psmDocumentation"))
 
-$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose"):
+#if(!$report.isEmpty($report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose")))
+$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose").concat(":")
+#end
 
 ```$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_type")
 $el.documentation$el.body
