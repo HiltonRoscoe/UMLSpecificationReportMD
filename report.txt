@@ -60,5 +60,29 @@ $el.documentation$el.body
 ```
 #end
 #end
+##START OCL
+#set ($constraintList = $array.createArray())
+#foreach ($constraint in $Constraint)
+#if ($constraint.constrainedElement.contains($class))
+#set ($void = $constraintList.add($constraint))
+#end
+#end
+#if(!$list.isEmpty($constraintList))
+
+#[[####]]# Business Rules
+
+#foreach($constraint in $constraintList)
+$report.getStereotypePropertyString($constraint, "validationRule", "errorMessage"):
+## This api is not published and may break
+
+```$list.get($constraint.specification.getLanguage(),0)
+#foreach($bodyPart in $constraint.specification.getBody())
+$bodyPart
+#end
+```
+
+#end
+##ENDOCL
+#end
 #end
 #end
