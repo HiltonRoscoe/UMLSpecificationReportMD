@@ -17,7 +17,8 @@
 #set ($void = $enumerationList.add($element))
 #end
 #end
-# Table of Contents
+# $project.name
+
 - Table of Contents
   - Enumerations
 #foreach ($enum in $sorter.sort($enumerationList))
@@ -27,19 +28,25 @@
 #foreach ($class in $sorter.sort($classList))
     - *The **[$class.name](#$class.elementID)** Class*
 #end
-# Enumerations
+
+#[[##]]# Enumerations
+
 #foreach ($enum in $sorter.sort($enumerationList))
 #[[###]]# <a name="$enum.elementID"></a>*The **$enum.name** Enumeration*
+
 ![Image of $enum.name]($image.createImageWithRelativePath($enum.image))
-    
+
 Name | Value
 ---- | -----
 #foreach ($enl in $enum.OwnedLiteral)`$enl.name`|$text.getPureText($enl.documentation)
 #end
-  #end
-# Classes
+
+#end
+#[[##]]# Classes
+
 #foreach ($class in $sorter.sort($classList))
 #[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
+
 ![Image of $class.name]($image.createImageWithRelativePath($class.image))
 ##END TOC SECTION
 
@@ -49,6 +56,7 @@ Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
 #foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
 #end
+
 #foreach($el in $class.ownedElement)
 #if ($report.containsStereotype($el,"psmDocumentation"))
 
