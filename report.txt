@@ -51,10 +51,12 @@ Name | Value
 ##END TOC SECTION
 
 $htmlhelper.mdhtmlToMarkdown($class.documentation)
+#if ($class.hasOwnedAttribute())
 
 Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
 #foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
+#end
 #end
 
 #foreach($el in $class.ownedElement)
