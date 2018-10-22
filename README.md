@@ -6,8 +6,13 @@ This is a MagicDraw report (written in Velocity) that will produce output simila
 
 - Produces Documentation for Classes and Enumerations
 - Converts mdel:// style hyperlinks into navigable bookmarks
+- Conversion of HTML to Markdown
 
-The markdown report does not support HTML tags other than the aforementioned bookmark links. All markup will be stripped prior to conversion to Markdown.
+## Examples
+
+The following examples were generated using this template:
+
+- [Voter Records Interchange Documentation](https://github.com/usnistgov/VoterRecordsInterchange/blob/master/VRI_UML_Documentation.md)
 
 ## Prerequisites
 
