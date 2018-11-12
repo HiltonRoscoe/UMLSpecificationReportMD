@@ -36,6 +36,8 @@
 
 ![Image of $enum.name]($image.createImageWithRelativePath($enum.image))
 
+$htmlhelper.mdhtmlToMarkdown($enum.documentation)
+
 Name | Value
 ---- | -----
 #foreach ($enl in $enum.OwnedLiteral)`$enl.name`|$text.getPureText($enl.documentation)
