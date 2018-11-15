@@ -1,5 +1,76 @@
 #import('text', 'com.nomagic.reportwizard.tools.TextTool')
 #import('htmlhelper', 'com.hiltonroscoe.mdreportext.HTMLHelper')
+#macro( classdoc $class)
+#if ($list.size($class.superClass) > 0)#[[#]]##end#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
+
+![Image of $class.name]($image.createImageWithRelativePath($class.image))
+##END TOC SECTION
+
+$htmlhelper.mdhtmlToMarkdown($class.documentation)
+#if ($class.hasOwnedAttribute())
+
+Attribute | Multiplicity | Type | Attribute Description
+--------- | ------------ | ---- | ---------------------
+#foreach ($attr in $sorter.sort($class.ownedAttribute))<a name="$attr.elementID"></a>`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
+#end
+#end
+
+#foreach($el in $class.ownedElement)
+#if ($report.containsStereotype($el,"psmDocumentation"))
+
+#if(!$report.isEmpty($report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose")))
+$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose").concat(":")
+#end
+
+```$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_type")
+$el.documentation$el.body
+```
+#end
+#end
+##START OCL
+#set ($constraintList = $array.createArray())
+#foreach ($constraint in $Constraint)
+#if ($constraint.constrainedElement.contains($class))
+#set ($void = $constraintList.add($constraint))
+#end
+#end
+#if(!$list.isEmpty($constraintList))
+
+#[[####]]# Business Rules
+
+#foreach($constraint in $constraintList)
+$report.getStereotypePropertyString($constraint, "validationRule", "errorMessage"):
+## This api is not published and may break
+
+```$list.get($constraint.specification.getLanguage(),0)
+#foreach($bodyPart in $constraint.specification.getBody())
+$bodyPart
+#end
+```
+
+#end
+##ENDOCL
+#end
+## recurse over subtypes
+#set($relationList = $report.getRelationship($class))
+$group.init()
+#foreach ($relation in $relationList)
+#set($void = $group.put($relation.humanType, $relation))
+#end
+#if (!$relationList.isEmpty())
+#if ($group.contains("Generalization"))
+#foreach($rel in $sorter.sort($group.get("Generalization")))
+#foreach ($re in $sorter.sort($rel.relatedElement))
+#if($re != $class)
+#classdoc($re)
+#end
+#end
+#end
+#end
+#end
+
+#end
+##ENDMACROS
 #set($packages = $array.createArray())
 #set($void = $array.addCollection($packages, $Package))
 #set($void = $array.addCollection($packages, $SmartPackage))
@@ -47,55 +118,8 @@ Name | Value
 #[[##]]# Classes
 
 #foreach ($class in $sorter.sort($classList))
-#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
-
-![Image of $class.name]($image.createImageWithRelativePath($class.image))
-##END TOC SECTION
-
-$htmlhelper.mdhtmlToMarkdown($class.documentation)
-#if ($class.hasOwnedAttribute())
-
-Attribute | Multiplicity | Type | Attribute Description
---------- | ------------ | ---- | ---------------------
-#foreach ($attr in $sorter.sort($class.ownedAttribute))`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
-#end
-#end
-
-#foreach($el in $class.ownedElement)
-#if ($report.containsStereotype($el,"psmDocumentation"))
-
-#if(!$report.isEmpty($report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose")))
-$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_purpose").concat(":")
-#end
-
-```$report.getStereotypePropertyString($el, "psmDocumentation", "documentation_type")
-$el.documentation$el.body
-```
-#end
-#end
-##START OCL
-#set ($constraintList = $array.createArray())
-#foreach ($constraint in $Constraint)
-#if ($constraint.constrainedElement.contains($class))
-#set ($void = $constraintList.add($constraint))
-#end
-#end
-#if(!$list.isEmpty($constraintList))
-
-#[[####]]# Business Rules
-
-#foreach($constraint in $constraintList)
-$report.getStereotypePropertyString($constraint, "validationRule", "errorMessage"):
-## This api is not published and may break
-
-```$list.get($constraint.specification.getLanguage(),0)
-#foreach($bodyPart in $constraint.specification.getBody())
-$bodyPart
-#end
-```
-
-#end
-##ENDOCL
+#if ($list.size($class.superClass) == 0)
+#classdoc ($class) 
 #end
 #end
 #end
