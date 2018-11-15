@@ -59,11 +59,15 @@ $group.init()
 #end
 #if (!$relationList.isEmpty())
 #if ($group.contains("Generalization"))
+#set ($relatedList = $array.createArray())
 #foreach($rel in $sorter.sort($group.get("Generalization")))
-#foreach ($re in $sorter.sort($rel.relatedElement))
-#if($re != $class)
-#classdoc($re)
+#foreach ($re in $sorter.sort($rel.relatedElement, "name"))
+#set ($void = $relatedList.add($re))
 #end
+#end
+#foreach ($relClass in $sorter.sort($relatedList, "name"))
+#if($relClass != $class)
+#classdoc($relClass)
 #end
 #end
 #end
