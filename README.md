@@ -13,6 +13,7 @@ This is a MagicDraw report (written in Velocity) that will produce output simila
 The following examples were generated using this template:
 
 - [Voter Records Interchange Documentation](https://github.com/usnistgov/VoterRecordsInterchange/blob/master/VRI_UML_Documentation.md)
+- [Cast Vote Records Documentation](https://github.com/usnistgov/CastVoteRecords/blob/master/CastVoteRecords_UML_Documentation.md)
 
 ## Prerequisites
 
