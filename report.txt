@@ -1,5 +1,6 @@
 #import('text', 'com.nomagic.reportwizard.tools.TextTool')
 #import('htmlhelper', 'com.hiltonroscoe.mdreportext.HTMLHelper')
+#import('hrsort', 'com.hiltonroscoe.mdreportext.Sorter')
 #macro( classdoc $class)
 #if ($GroupSubtypes == "true" && $list.size($class.superClass) > 0)#[[#]]##end#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
 
@@ -11,7 +12,9 @@ $htmlhelper.mdhtmlToMarkdown($class.documentation)
 
 Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
-#foreach ($attr in $sorter.sort($class.ownedAttribute))<a name="$attr.elementID"></a>`#if (!$attr.association)$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
+## Must convert to whatever array $array creates, or the method signature won't be right for sortByRule
+#set ($attrArray = $array.createArray($class.ownedAttribute))
+#foreach ($attr in $hrsort.sortByRule($attrArray))<a name="$attr.elementID"></a>`#if (!$attr.association)$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
 #end
 #end
 
