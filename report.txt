@@ -1,7 +1,7 @@
 #import('text', 'com.nomagic.reportwizard.tools.TextTool')
 #import('htmlhelper', 'com.hiltonroscoe.mdreportext.HTMLHelper')
 #macro( classdoc $class)
-#if ($list.size($class.superClass) > 0)#[[#]]##end#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
+#if ($GroupSubtypes == "true" && $list.size($class.superClass) > 0)#[[#]]##end#[[###]]# <a name="$class.elementID"></a>*The **$class.name** Class*
 
 ![Image of $class.name]($image.createImageWithRelativePath($class.image))
 ##END TOC SECTION
@@ -11,7 +11,7 @@ $htmlhelper.mdhtmlToMarkdown($class.documentation)
 
 Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
-#foreach ($attr in $sorter.sort($class.ownedAttribute))<a name="$attr.elementID"></a>`#if (!$report.isEmpty($attr.name))$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
+#foreach ($attr in $sorter.sort($class.ownedAttribute))<a name="$attr.elementID"></a>`#if (!$attr.association)$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
 #end
 #end
 
@@ -51,6 +51,7 @@ $bodyPart
 #end
 ##ENDOCL
 #end
+#if ($GroupSubtypes == "true")
 ## recurse over subtypes
 #set($relationList = $report.getRelationship($class))
 $group.init()
@@ -68,6 +69,7 @@ $group.init()
 #foreach ($relClass in $sorter.sort($relatedList, "name"))
 #if($relClass != $class)
 #classdoc($relClass)
+#end
 #end
 #end
 #end
@@ -122,7 +124,7 @@ Name | Value
 #[[##]]# Classes
 
 #foreach ($class in $sorter.sort($classList))
-#if ($list.size($class.superClass) == 0)
+#if ($GroupSubtypes == "false" || $list.size($class.superClass) == 0)
 #classdoc ($class) 
 #end
 #end
