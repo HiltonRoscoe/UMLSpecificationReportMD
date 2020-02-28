@@ -14,7 +14,7 @@ Attribute | Multiplicity | Type | Attribute Description
 --------- | ------------ | ---- | ---------------------
 ## Must convert to whatever array $array creates, or the method signature won't be right for sortByRule
 #set ($attrArray = $array.createArray($class.ownedAttribute))
-#foreach ($attr in $hrsort.sortByRule($attrArray))<a name="$attr.elementID"></a>`#if (!$attr.association)$attr.name#else{$attr.type.name}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
+#foreach ($attr in $hrsort.sortByRule($attrArray))<a name="$attr.elementID"></a>`#if($attr.association){#end#if (!$report.isEmpty($attr.name))$attr.name#else$attr.type.name#end#if($attr.association)}#end`|$attr.multiplicity|`$attr.type.name`|$htmlhelper.mdhtmlToMarkdown($attr.documentation)
 #end
 #end
 
