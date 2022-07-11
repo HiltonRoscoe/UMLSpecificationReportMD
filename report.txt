@@ -10,7 +10,7 @@
 $htmlhelper.mdhtmlToMarkdown($class.documentation)
 #if ($class.hasOwnedAttribute())
 
-Attribute | Multiplicity | Type | Attribute Description
+Property  | Multiplicity | Type | Property Description
 --------- | ------------ | ---- | ---------------------
 ## Must convert to whatever array $array creates, or the method signature won't be right for sortByRule
 #set ($attrArray = $array.createArray($class.ownedAttribute))
