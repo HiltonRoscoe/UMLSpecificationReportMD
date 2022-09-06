@@ -1,3 +1,4 @@
+##WARNING make sure velocimacro.context.localscope = true (in MD Env) or you will get infinite recusion!
 #import('text', 'com.nomagic.reportwizard.tools.TextTool')
 #import('htmlhelper', 'com.hiltonroscoe.mdreportext.HTMLHelper')
 #import('hrsort', 'com.hiltonroscoe.mdreportext.Sorter')
@@ -70,7 +71,7 @@ $group.init()
 #end
 #end
 #foreach ($relClass in $sorter.sort($relatedList, "name"))
-#if($relClass != $class)
+#if($relClass != $class && !$list.contains($class.superClass, $relClass))
 #classdoc($relClass)
 #end
 #end
@@ -79,6 +80,7 @@ $group.init()
 #end
 
 #end
+
 ##ENDMACROS
 #set($packages = $array.createArray())
 #set($void = $array.addCollection($packages, $Package))
